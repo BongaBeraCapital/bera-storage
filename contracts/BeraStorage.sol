@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 pragma solidity =0.8.10;
 
-import { u60x18, u60x18_t } from "./Math.sol";
+/* Package Imports */
+import { u60x18, u60x18_t } from "@bonga-bera-capital/bera-utils/contracts/Math.sol";
+
+/* Interfaces */
 import { IBeraStorage } from "../interfaces/IBeraStorage.sol";
 
 contract BeraStorage is IBeraStorage {
