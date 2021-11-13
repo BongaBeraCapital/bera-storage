@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity =0.8.10;
 
-import "@hifi-finance/prb-math/contracts/PRBMathUD60X18.sol";
+import "@hifi-finance/prb-math/contracts/PRBMathUD60x18.sol";
 
 /**
  * @dev Standard math utilities missing in the Solidity language.
