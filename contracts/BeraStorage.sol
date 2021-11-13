@@ -3,16 +3,18 @@ pragma solidity =0.8.10;
 
 /* Package Imports */
 import { u60x18, u60x18_t } from "@bonga-bera-capital/bera-utils/contracts/Math.sol";
+import { TypeSwaps } from "@bonga-bera-capital/bera-utils/contracts/TypeSwaps.sol";
 
 /* Interfaces */
 import { IBeraStorage } from "../interfaces/IBeraStorage.sol";
 
 contract BeraStorage is IBeraStorage {
     /* Events */
-    event GuardianChanged(address oldGuardian, address newGuardian);
+    event GuardianChanged(address oldStorageGuardian, address newStorageGuardian);
 
     /* Libraries  */
-    using u60x18 for uint256;
+    using TypeSwaps for uint256;
+    using TypeSwaps for u60x18_t;
     using u60x18 for u60x18_t;
 
     /* Storage maps  */
@@ -25,8 +27,8 @@ contract BeraStorage is IBeraStorage {
     mapping(bytes32 => bytes32) private bytes32Storage;
 
     // Guardian address
-    address guardian;
-    address newGuardian;
+    address storageGuardian;
+    address newStorageGuardian;
 
     // Flag storage has been initialised
     bool storageInit = false;
@@ -42,7 +44,7 @@ contract BeraStorage is IBeraStorage {
         } else {
             // tx.origin is only safe to use in this case for deployment since no external contracts are interacted with
             require(
-                (booleanStorage[keccak256(abi.encodePacked("contract.registered", msg.sender))] || tx.origin == guardian),
+                (booleanStorage[keccak256(abi.encodePacked("contract.registered", msg.sender))] || tx.origin == storageGuardian),
                 "Invalid or outdated network contract attempting access during deployment"
             );
         }
@@ -51,34 +53,34 @@ contract BeraStorage is IBeraStorage {
 
     /// @dev Construct TropicalStorage
     constructor() {
-        // Set the guardian upon deployment
-        guardian = msg.sender;
+        // Set the storageGuardian upon deployment
+        storageGuardian = msg.sender;
     }
 
-    // Get guardian address
+    // Get storageGuardian address
     function getGuardian() external view override returns (address) {
-        return guardian;
+        return storageGuardian;
     }
 
-    // Transfers guardianship to a new address
+    // Transfers storageGuardianship to a new address
     function setGuardian(address _newAddress) external override {
-        // Check tx comes from current guardian
-        require(msg.sender == guardian, "Is not guardian account");
+        // Check tx comes from current storageGuardian
+        require(msg.sender == storageGuardian, "Is not storageGuardian account");
         // Store new address awaiting confirmation
-        newGuardian = _newAddress;
+        newStorageGuardian = _newAddress;
     }
 
-    // Confirms change of guardian
+    // Confirms change of storageGuardian
     function confirmGuardian() external override {
-        // Check tx came from new guardian address
-        require(msg.sender == newGuardian, "Confirmation must come from new guardian address");
-        // Store old guardian for event
-        address oldGuardian = guardian;
-        // Update guardian and clear storage
-        guardian = newGuardian;
-        delete newGuardian;
+        // Check tx came from new storageGuardian address
+        require(msg.sender == newStorageGuardian, "Confirmation must come from new storageGuardian address");
+        // Store old storageGuardian for event
+        address oldGuardian = storageGuardian;
+        // Update storageGuardian and clear storage
+        storageGuardian = newStorageGuardian;
+        delete newStorageGuardian;
         // Emit event
-        emit GuardianChanged(oldGuardian, guardian);
+        emit GuardianChanged(oldGuardian, storageGuardian);
     }
 
     // Set this as being deployed now
@@ -88,8 +90,8 @@ contract BeraStorage is IBeraStorage {
 
     // Set this as being deployed now
     function setDeployedStatus() external {
-        // Only guardian can lock this down
-        require(msg.sender == guardian, "Is not guardian account");
+        // Only storageGuardian can lock this down
+        require(msg.sender == storageGuardian, "Is not storageGuardian account");
         // Set it now
         storageInit = true;
     }
@@ -106,7 +108,7 @@ contract BeraStorage is IBeraStorage {
 
     /// @param _key The key for the record
     function getUD60x18(bytes32 _key) external view override returns (u60x18_t r) {
-        return uintStorage[_key].asUD60x18();
+        return uintStorage[_key].asU60x18();
     }
 
     /// @param _key The key for the record
