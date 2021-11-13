@@ -13,7 +13,7 @@ jobs:
           pkg-manager: pip
       - run: 
           name: Install Ganache
-          command: npm install -g ganache-cli
+          command: npm install -i ganache-cli
 
       - run:
           name: Run tests
