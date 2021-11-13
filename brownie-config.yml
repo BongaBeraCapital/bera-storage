@@ -1,0 +1,22 @@
+# brownie-config.yaml
+dependencies:
+  - hifi-finance/prb-math@2.4.1
+
+compiler:
+  solc:
+    version: 0.8.10
+    remappings:
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.2'
+      - '@hifi-finance/prb-math=hifi-finance/prb-math@2.4.1'
+
+networks:
+  default: development
+  development:
+    cmd: ganache-cli
+    cmd_settings:
+      port: 8545
+      gas_limit: 6721975
+      default_balance: 10000 ether
+      accounts: 150
+      evm_version: istanbul
+      mnemonic: brownie
