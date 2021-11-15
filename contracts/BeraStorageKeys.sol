@@ -11,7 +11,7 @@ abstract contract BeraStorageKeys {
     // Declarations
     //=================================================================================================================
 
-    _contract internal contracts = _contract("addressof", "name", "registered");
+    _contract internal contracts = _contract("contract.addressof", "contract.name", "contract.registered");
 
     //=================================================================================================================
     // Definitions

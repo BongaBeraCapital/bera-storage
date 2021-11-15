@@ -15,7 +15,10 @@ interface IBeraStorageMixin {
     // Errors
     //=================================================================================================================
     
-    error BeraStorageMixin__ContractNotFound(string name);
+    error BeraStorageMixin__ContractNotFoundByAddressOrIsOutdated(address inName);
+    error BeraStorageMixin__ContractNotFoundByNameOrIsOutdated(string inName);
+    error BeraStorageMixin__UserIsNotGuardian(address inUser);
+        
 
 }
 

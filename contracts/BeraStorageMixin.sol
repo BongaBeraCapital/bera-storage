@@ -28,17 +28,45 @@ abstract contract BeraStorageMixin is BeraStorageKeys, IBeraStorageMixin {
     // Connections
     //=================================================================================================================
 
-    IBeraStorage internal BeraStorage = IBeraStorage(address(0));
+    IBeraStorage internal BeraStorage_ = IBeraStorage(address(0));
+
+    //=================================================================================================================
+    // BeraStorageMixin.onlyFromNetworkContract
+    //=================================================================================================================
+
+    modifier onlyFromRegisteredContract() {
+        if (!BeraStorage_.getBool(keccak256(abi.encodePacked(BeraStorageKeys.contracts.registered, msg.sender))))
+            revert BeraStorageMixin__ContractNotFoundByAddressOrIsOutdated(msg.sender);
+        _;
+    }
+
+    //=================================================================================================================
+    // BeraStorageMixin.onlyLatestContract
+    //=================================================================================================================
+
+    modifier onlyFromContract(string memory inName, address inAddress) {
+        if (inAddress != BeraStorage_.getAddress(keccak256(abi.encodePacked(BeraStorageKeys.contracts.name, inName))))
+            revert BeraStorageMixin__ContractNotFoundByNameOrIsOutdated(inName);
+        _;
+    }
+
+    /**
+     * @dev Throws if called by any account other than a guardian account (temporary account allowed access to settings before DAO is fully enabled)
+     */
+    modifier onlyFromGuardian() {
+        if (msg.sender != BeraStorage_.getGuardian()) revert BeraStorageMixin__UserIsNotGuardian(msg.sender);
+        _;
+    }
 
     //=================================================================================================================
     // BeraStorageMixin.getContractAddressByName
     //=================================================================================================================
 
     function getContractAddressByName(string memory inName) internal view returns (address) {
-        address contractAddress = BeraStorage.getAddress(
+        address contractAddress = BeraStorage_.getAddress(
             keccak256(abi.encodePacked(BeraStorageKeys.contracts.addressof, inName))
         );
-        if (contractAddress == address(0x0)) revert BeraStorageMixin__ContractNotFound(inName);
+        if (contractAddress == address(0x0)) revert BeraStorageMixin__ContractNotFoundByNameOrIsOutdated(inName);
         return contractAddress;
     }
 }

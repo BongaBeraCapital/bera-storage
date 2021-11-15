@@ -1,5 +1,6 @@
 # brownie-config.yaml
 dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.3.2
   - hifi-finance/prb-math@2.4.1
   - BongaBeraCapital/bera-utils@0.0.1-alpha
 
@@ -7,6 +8,7 @@ compiler:
   solc:
     version: 0.8.10
     remappings:
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.2'
       - '@hifi-finance/prb-math=hifi-finance/prb-math@2.4.1'
       - '@bonga-bera-capital/bera-utils=BongaBeraCapital/bera-utils@0.0.1-alpha'
 

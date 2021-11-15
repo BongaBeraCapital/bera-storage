@@ -25,12 +25,12 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
     // Storage Maps
     //=================================================================================================================
 
-    mapping(bytes32 => string) private stringStorage;
-    mapping(bytes32 => bytes) private bytesStorage;
+    mapping(bytes32 => string)  private stringStorage;
+    mapping(bytes32 => bytes)   private bytesStorage;
     mapping(bytes32 => uint256) private uintStorage;
-    mapping(bytes32 => int256) private intStorage;
+    mapping(bytes32 => int256)  private intStorage;
     mapping(bytes32 => address) private addressStorage;
-    mapping(bytes32 => bool) private booleanStorage;
+    mapping(bytes32 => bool)    private booleanStorage;
     mapping(bytes32 => bytes32) private bytes32Storage;
 
     //=================================================================================================================
@@ -55,7 +55,7 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
 
     modifier onlyRegisteredContracts() {
         if (storageInit == true) {
-            // Make sure the access is permitted to only contracts in our Dapp
+            // Make sure the access is permitted to only contracts registered with the network
             if (!booleanStorage[keccak256(abi.encodePacked(BeraStorageKeys.contracts.registered, msg.sender))]) {
                 revert BeraStorage__ContractNotRegistered(msg.sender);
             }
