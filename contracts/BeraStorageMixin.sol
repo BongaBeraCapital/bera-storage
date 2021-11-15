@@ -50,9 +50,10 @@ abstract contract BeraStorageMixin is BeraStorageKeys, IBeraStorageMixin {
         _;
     }
 
-    /**
-     * @dev Throws if called by any account other than a guardian account (temporary account allowed access to settings before DAO is fully enabled)
-     */
+    //=================================================================================================================
+    // BeraStorageMixin.onlyFromGuardian
+    //=================================================================================================================
+
     modifier onlyFromGuardian() {
         if (msg.sender != BeraStorage_.getGuardian()) revert BeraStorageMixin__UserIsNotGuardian(msg.sender);
         _;
