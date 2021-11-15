@@ -34,7 +34,7 @@ abstract contract BeraStorageMixin is BeraStorageKeys, IBeraStorageMixin {
     // BeraStorageMixin.onlyFromNetworkContract
     //=================================================================================================================
 
-    modifier onlyFromRegisteredContract() {
+    modifier onlyFromRegisteredContracts() {
         if (!BeraStorage_.getBool(keccak256(abi.encodePacked(BeraStorageKeys.contracts.registered, msg.sender))))
             revert BeraStorageMixin__ContractNotFoundByAddressOrIsOutdated(msg.sender);
         _;
