@@ -27,6 +27,14 @@ abstract contract BeraStorageFactoryMixin is BeraStorageKeys, IBeraStorageFactor
     IBeraStorageFactory internal BeraStorageFactory;
 
     //=================================================================================================================
+    // Constructor
+    //=================================================================================================================
+
+    constructor(address storageFactoryContractAddress) {
+        BeraStorageFactory = IBeraStorageFactory(storageFactoryContractAddress);
+    }
+
+    //=================================================================================================================
     // Internal Functons
     //=================================================================================================================
 
