@@ -1,14 +1,11 @@
 import pytest
-from brownie import network, accounts, exceptions
-
-from tests.conftest import bera_storage_factory
+from brownie import network, accounts, exceptions, convert
 
 
 
+class TestBeraStorageFactory():
 
-class TestBeraStorageFactory(bera_storage_factory):
-    
-    def test_deploy(contract):
-        deployment_addr = bera_storage_factory.deploy("MyStorage")
-        assert bera_storage_factory.getContractByName()
+    def test_deploy_storage_contract(self, dao_deployer, bera_storage_factory):
+        deployment_addr = bera_storage_factory.deployStorageContract(b'MyStorage').return_value
+        assert bera_storage_factory.getStorageContractByName(b'MyStorage') == deployment_addr
         
