@@ -17,8 +17,7 @@ import {IBeraStorageFactory} from "../interfaces/IBeraStorageFactory.sol";
  * @notice A contract that uses the factory design pattern to deploy BeraStorage contracts. Usage of this contract is
  * total optional. BeraStorage can also be deployed indivually without a factory.
  */
-contract BeraStorageFactory is IBeraStorageFactory
-{
+contract BeraStorageFactory is IBeraStorageFactory {
     //=================================================================================================================
     // Storage Maps
     //=================================================================================================================
@@ -43,6 +42,7 @@ contract BeraStorageFactory is IBeraStorageFactory
         if (storageContracts[contractName] != IBeraStorage(address(0)))
             revert BeraStorageFactory_ContractAlreadyExists(contractName);
         storageContracts[contractName] = IBeraStorage(new BeraStorage());
+        storageContracts[contractName].sendGuardianInvitation(msg.sender);
         return storageContracts[contractName];
     }
 

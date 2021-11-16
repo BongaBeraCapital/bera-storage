@@ -50,7 +50,7 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
     }
 
     //=================================================================================================================
-    // BeraStorage.onlyRegisteredContracts
+    // Modifiers
     //=================================================================================================================
 
     modifier onlyRegisteredContracts() {
@@ -70,25 +70,17 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
     }
 
     //=================================================================================================================
-    // BeraStorage.getGuardian
+    // External Functions
     //=================================================================================================================
 
     function getGuardian() external view override returns (address) {
         return storageGuardian;
     }
 
-    //=================================================================================================================
-    // BeraStorage.sendGuardianInvitation
-    //=================================================================================================================
-
     function sendGuardianInvitation(address _newAddress) external override {
         if (msg.sender != storageGuardian) revert BeraStorage__NotStorageGuardian(msg.sender);
         newStorageGuardian = _newAddress;
     }
-
-    //=================================================================================================================
-    // BeraStorage.acceptGuardianInvitation
-    //=================================================================================================================
 
     function acceptGuardianInvitation() external override {
         if (msg.sender != newStorageGuardian) revert BeraStorage__NoGuardianInvitation(msg.sender);
@@ -98,17 +90,9 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
         emit GuardianChanged(oldGuardian, storageGuardian);
     }
 
-    //=================================================================================================================
-    // BeraStorage.getDeployedStatus
-    //=================================================================================================================
-
     function getDeployedStatus() external view override returns (bool) {
         return storageInit;
     }
-
-    //=================================================================================================================
-    // BeraStorage.getDeployedStatus
-    //=================================================================================================================
 
     function setDeployedStatus() external {
         if (msg.sender != storageGuardian) revert BeraStorage__NotStorageGuardian(msg.sender);

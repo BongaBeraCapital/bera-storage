@@ -13,14 +13,12 @@ import {IBeraStorage} from "../../interfaces/IBeraStorage.sol";
 import {IBeraStorageFactory} from "../../interfaces/IBeraStorageFactory.sol";
 import {IBeraStorageFactoryMixin} from "../../interfaces/mixins/IBeraStorageFactoryMixin.sol";
 
-
 /**
  * @title BeraStorageFactoryMixin
  * @author 0xrebased @ Bonga Bera Capital: https://github.com/BongaBeraCapital
  * @notice A mixin that allows the child class to access eternal BeraStorage contracts via a BeraStorageFactory
  */
 abstract contract BeraStorageFactoryMixin is BeraStorageKeys, IBeraStorageFactoryMixin {
-
     //=================================================================================================================
     // State Variables
     //=================================================================================================================
@@ -32,12 +30,17 @@ abstract contract BeraStorageFactoryMixin is BeraStorageKeys, IBeraStorageFactor
     // Internal Functons
     //=================================================================================================================
 
-    function getContractAddressByName(bytes32 contractName, bytes32 storageContractName) internal view returns (address) {
+    function getContractAddressByName(bytes32 contractName, bytes32 storageContractName)
+        internal
+        view
+        returns (address)
+    {
         IBeraStorage storageContract = BeraStorageFactory.getStorageContractByName(storageContractName);
         address contractAddress = storageContract.getAddress(
             keccak256(abi.encodePacked(BeraStorageKeys.contracts.addressof, contractName))
         );
-        if (contractAddress == address(0x0)) revert BeraStorageFactoryMixin__ContractNotFoundByNameOrIsOutdated(contractName);
+        if (contractAddress == address(0x0))
+            revert BeraStorageFactoryMixin__ContractNotFoundByNameOrIsOutdated(contractName);
         return contractAddress;
     }
 
@@ -52,10 +55,16 @@ abstract contract BeraStorageFactoryMixin is BeraStorageKeys, IBeraStorageFactor
         _;
     }
 
-    modifier onlyContract(bytes32 contractName, address inAddress, bytes32 storageContractName) {
+    modifier onlyContract(
+        bytes32 contractName,
+        address inAddress,
+        bytes32 storageContractName
+    ) {
         IBeraStorage storageContract = BeraStorageFactory.getStorageContractByName(storageContractName);
-        if (inAddress != storageContract.getAddress(keccak256(abi.encodePacked(BeraStorageKeys.contracts.name, contractName))))
-            revert BeraStorageFactoryMixin__ContractNotFoundByNameOrIsOutdated(contractName);
+        if (
+            inAddress !=
+            storageContract.getAddress(keccak256(abi.encodePacked(BeraStorageKeys.contracts.name, contractName)))
+        ) revert BeraStorageFactoryMixin__ContractNotFoundByNameOrIsOutdated(contractName);
         _;
     }
 

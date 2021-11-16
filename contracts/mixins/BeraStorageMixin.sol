@@ -18,7 +18,6 @@ import {IBeraStorageMixin} from "../../interfaces/mixins/IBeraStorageMixin.sol";
  * @notice A mixin that allows the child class to access eternal BeraStorage contracts
  */
 abstract contract BeraStorageMixin is BeraStorageKeys, IBeraStorageMixin {
-  
     //=================================================================================================================
     // State Variables
     //=================================================================================================================
@@ -49,8 +48,10 @@ abstract contract BeraStorageMixin is BeraStorageKeys, IBeraStorageMixin {
     }
 
     modifier onlyContract(bytes32 contractName, address contractAddress) {
-        if (contractAddress != BeraStorage_.getAddress(keccak256(abi.encodePacked(BeraStorageKeys.contracts.name, contractName))))
-            revert BeraStorageMixin__ContractNotFoundByNameOrIsOutdated(contractName);
+        if (
+            contractAddress !=
+            BeraStorage_.getAddress(keccak256(abi.encodePacked(BeraStorageKeys.contracts.name, contractName)))
+        ) revert BeraStorageMixin__ContractNotFoundByNameOrIsOutdated(contractName);
         _;
     }
 
