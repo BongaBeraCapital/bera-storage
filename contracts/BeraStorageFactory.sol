@@ -3,12 +3,10 @@ pragma solidity =0.8.10;
 
 /* Package Imports */
 import {u60x18, u60x18_t} from "@bonga-bera-capital/bera-utils/contracts/Math.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {TypeSwaps} from "@bonga-bera-capital/bera-utils/contracts/TypeSwaps.sol";
 
 /* Internal Imports */
 import {BeraStorage, IBeraStorage} from "./BeraStorage.sol";
-import {BeraStorageMixin} from "./BeraStorageMixin.sol";
 
 /* Internal Interface Imports */
 import {IBeraStorageFactory} from "../interfaces/IBeraStorageFactory.sol";
@@ -19,7 +17,8 @@ import {IBeraStorageFactory} from "../interfaces/IBeraStorageFactory.sol";
  * @notice A contract that uses the factory design pattern to deploy BeraStorage contracts. Usage of this contract is
  * total optional. BeraStorage can also be deployed indivually without a factory.
  */
-contract BeraStorageFactory is BeraStorageMixin, IBeraStorageFactory, Ownable { // TODO: Update from Ownable to a Guardian
+contract BeraStorageFactory is IBeraStorageFactory
+{
     //=================================================================================================================
     // Storage Maps
     //=================================================================================================================
@@ -30,37 +29,31 @@ contract BeraStorageFactory is BeraStorageMixin, IBeraStorageFactory, Ownable { 
     // Constructor
     //=================================================================================================================
 
-    constructor(uint256 numStorageContracts, bytes32[] memory inContractNames) Ownable() {
-        for (uint256 i = 0; i < numStorageContracts; i += 1) {
-            deployStorageContract(inContractNames[i]);
+    constructor(bytes32[] memory contractNames) {
+        for (uint256 i = 0; i < contractNames.length; i += 1) {
+            deployStorageContract(contractNames[i]);
         }
     }
 
     //=================================================================================================================
-    // BeraStorageFactory.deployStorageContract
+    // Public Functions
     //=================================================================================================================
 
-    function deployStorageContract(bytes32 inContractName) public virtual override onlyOwner {
-        if (storageContracts[inContractName] != IBeraStorage(address(0)))
-            revert BeraStorageFactory_ContractAlreadyExists(inContractName);
-        storageContracts[inContractName] = IBeraStorage(new BeraStorage());
+    function deployStorageContract(bytes32 contractName) public virtual override returns (IBeraStorage) {
+        if (storageContracts[contractName] != IBeraStorage(address(0)))
+            revert BeraStorageFactory_ContractAlreadyExists(contractName);
+        storageContracts[contractName] = IBeraStorage(new BeraStorage());
+        return storageContracts[contractName];
     }
 
-    //=================================================================================================================
-    // BeraStorageFactory.removeStorageContract
-    //=================================================================================================================
-
-    function removeStorageContract(bytes32 inContractName) public virtual override onlyOwner {
-        if (storageContracts[inContractName] == BeraStorage(address(0)))
-            revert BeraStorageFactory_ContractDoesNotExist(inContractName);
-        delete storageContracts[inContractName];
+    function removeStorageContract(bytes32 contractName) public virtual override returns (bool) {
+        if (storageContracts[contractName] == BeraStorage(address(0)))
+            revert BeraStorageFactory_ContractDoesNotExist(contractName);
+        delete storageContracts[contractName];
+        return true;
     }
 
-    //=================================================================================================================
-    // BeraStorageFactory.getStorageContractByName
-    //=================================================================================================================
-
-    function getStorageContractByName(bytes32 inContractName) external view virtual override returns (IBeraStorage) {
-        return storageContracts[inContractName];
+    function getStorageContractByName(bytes32 contractName) external view virtual override returns (IBeraStorage) {
+        return storageContracts[contractName];
     }
 }

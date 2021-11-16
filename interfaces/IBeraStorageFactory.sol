@@ -11,6 +11,7 @@ import {IBeraStorage} from "./IBeraStorage.sol";
  */
 
 interface IBeraStorageFactory {
+    
     //=================================================================================================================
     // Errors
     //=================================================================================================================
@@ -22,8 +23,8 @@ interface IBeraStorageFactory {
     // Mutators
     //=================================================================================================================
 
-    function deployStorageContract(bytes32 inContractName) external;
-    function removeStorageContract(bytes32 inContractName) external;
+    function deployStorageContract(bytes32 inContractName) external returns (IBeraStorage);
+    function removeStorageContract(bytes32 inContractName) external returns (bool);
 
     //=================================================================================================================
     // Accessors

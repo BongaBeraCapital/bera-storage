@@ -25,12 +25,12 @@ contract BeraStorage is BeraStorageKeys, IBeraStorage {
     // Storage Maps
     //=================================================================================================================
 
-    mapping(bytes32 => string)  private stringStorage;
-    mapping(bytes32 => bytes)   private bytesStorage;
+    mapping(bytes32 => string) private stringStorage;
+    mapping(bytes32 => bytes) private bytesStorage;
     mapping(bytes32 => uint256) private uintStorage;
-    mapping(bytes32 => int256)  private intStorage;
+    mapping(bytes32 => int256) private intStorage;
     mapping(bytes32 => address) private addressStorage;
-    mapping(bytes32 => bool)    private booleanStorage;
+    mapping(bytes32 => bool) private booleanStorage;
     mapping(bytes32 => bytes32) private bytes32Storage;
 
     //=================================================================================================================
